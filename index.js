@@ -9,7 +9,6 @@ const server = http.createServer((req,res) => {
     let rota = urlCompleta.pathname;
 
     // console.log(queryString);
-
     switch (rota){
         case "/pets":
             let conteudo = petshop.listarPets();
@@ -21,12 +20,7 @@ const server = http.createServer((req,res) => {
             break;
         case "/pets/add":
             let novoPet = queryString;
-            if (petshop.adicionarPet(novoPet)){
-                res.write(`${novoPet.nome} foi adicionado a nossa lista!`);
-                
-            } else {
-                res.write("Nenhum Pet foi adicionado :(")
-            }
+            res.write(petshop.adicionarPet(novoPet))
             break;
         case "/pets/buscar":
             let nomePet = queryString.nome;
@@ -37,6 +31,23 @@ const server = http.createServer((req,res) => {
                 res.write("Ops, nenhum pet encontrado com esse nome!")  
             }
             break;
+        case "/pets/campanha":
+            res.write("Vacinando...")
+            res.write(petshop.campanhaVacina())
+
+            break
+        case "/pets/atender":
+            let pet = queryString.nome
+            let servico = queryString.servico
+            if(pet && servico){
+                res.write(petshop.atenderPet(pet, servico))
+            } else {
+                res.write(`Escolha um Pet e um Serviço`)
+            }
+        break
+        case "/pets/pagar":
+            res.write(petshop.pagar())
+        break
         default:
             res.write("tô perdido")
     }
